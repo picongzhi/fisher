@@ -1,5 +1,6 @@
 class BookViewModel(object):
     def __init__(self, book):
+        self.isbn = book['isbn']
         self.title = book['title']
         self.publisher = book['publisher']
         self.author = book['author']
@@ -7,6 +8,11 @@ class BookViewModel(object):
         self.price = book['price']
         self.summary = book['summary']
         self.pages = book['pages']
+
+    @property
+    def intro(self):
+        return ' / '.join(filter(lambda x: True if x else False,
+                                 [', '.join(self.author) if self.author else '', self.publisher, self.price]))
 
 
 class BookCollection(object):
