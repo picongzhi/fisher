@@ -14,8 +14,3 @@ class Base(db.Model):
         for key, value in attrs_dict.items():
             if hasattr(self, key) and key != 'id':
                 setattr(self, key, value)
-
-
-from . import book
-from . import gift
-from . import user
