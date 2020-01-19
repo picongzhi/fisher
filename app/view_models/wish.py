@@ -1,7 +1,7 @@
 from .trade import MyTrades
 
 
-class MyGifts(MyTrades):
+class MyWishes(MyTrades):
     pass
 
 
