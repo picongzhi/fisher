@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_mail import Mail
 
 from app.models.base import db
 
 login_manager = LoginManager()
+mail = Mail()
 
 
 def create_app():
@@ -13,9 +15,12 @@ def create_app():
     register_blueprint(app)
 
     db.init_app(app)
+
     login_manager.init_app(app)
     login_manager.login_view = 'web.login'
     login_manager.login_message = '请先登录或注册'
+
+    mail.init_app(app)
 
     # db.create_all(app=app)
     with app.app_context():
