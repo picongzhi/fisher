@@ -9,4 +9,4 @@ MAIL_PORT = 465
 MAIL_USE_SSL = True
 MAIL_USE_TSL = False
 MAIL_USERNAME = '476371403@qq.com'
-MAIL_PASSWORD = ''
+MAIL_PASSWORD = 'bayzzvvoxmvnbhcj'
