@@ -8,7 +8,9 @@ from app.models.gift import Gift
 from app.models.drift import Drift
 from app.forms.book import DriftForm
 from app.view_models.book import BookViewModel
+from app.view_models.drift import DriftCollection
 from app.libs.email import send_mail
+from app.libs.enums import PendingStatus
 
 
 @web.route('/drift/<int:gid>', methods=['GET', 'POST'])
@@ -43,10 +45,13 @@ def send_drift(gid):
 @web.route('/pendning')
 @login_required
 def pending():
-    drift = Drift.query.filter(
+    drifts = Drift.query.filter(
         or_(Drift.requester_id == current_user.id,
             Drift.gifter_id == current_user.id)).order_by(
         desc(Drift.create_time)).all()
+    view_model = DriftCollection(drifts, current_user.id)
+
+    return render_template('pending.html', drifts=view_model.data)
 
 
 @web.route('/drift/<int:did>/reject')
@@ -55,8 +60,14 @@ def reject_drift(did):
 
 
 @web.route('/drift/<int:did>/redraw')
+@login_required
 def redraw_drift(did):
-    pass
+    with db.auto_commit():
+        drift = Drift.query.filter_by(id=did, requester_id=current_user.id).first_or_404()
+        drift.pending = PendingStatus.Redraw
+        current_user.beans += 1
+
+    return redirect(url_for('web.pending'))
 
 
 @web.route('/drift/<int:did>/mailed')
